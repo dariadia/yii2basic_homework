@@ -53,12 +53,6 @@ $config = [
             'showScriptName' => false,
             'rules' => [],
         ],
-        'comp' => [
-            'class' => \app\components\Comp::class,
-        ],
-        'sessiontracker' => [
-            'class' => \app\components\SessionTracker::class,
-        ],
     ],
     'params' => $params,
 ];

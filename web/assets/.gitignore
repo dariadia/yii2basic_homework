@@ -1,0 +1,10 @@
+*
+!.gitignore
+
+tests/_output/*
+
+
+web/assets/
+docker/database/
+runtime/
+vendor/
