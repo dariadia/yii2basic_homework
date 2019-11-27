@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\file\FileInput;
 
 $form = ActiveForm::begin([
     'enableClientValidation' => false,
@@ -19,6 +20,10 @@ echo $form->field($model, 'fromendDay_date')->widget(\yii\jui\DatePicker::class,
 ]);
 echo $form->field($model, 'idAuthor')->textInput();
 echo $form->field($model, 'body')->textarea();
+echo $form->field($model, 'uploads[]')->widget(FileInput::classname(), [
+    'options' => ['multiple' => true],
+    'pluginOptions' => ['previewFileType' => 'any']
+]);
 echo $form->field($model, 'cyclic')->checkbox();
 echo $form->field($model, 'main')->checkbox();
 echo Html::submitButton(
