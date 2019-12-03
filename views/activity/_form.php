@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-//use kartik\date\DatePicker;
+use kartik\datetime\DateTimePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Activity */
@@ -15,8 +15,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'started_at')->textInput() ?>
+    <!-- <?= $form->field($model, 'started_at')->widget(DateTimePicker::classname(), [
+                'options' => ['placeholder' => 'Enter event time'],
+                'pluginOptions' => [
+                    'autoclose' => true
+                ]
+            ]); ?> -->
 
+    <?= $form->field($model, 'started_at')->textInput() ?>
     <?= $form->field($model, 'finished_at')->textInput() ?>
 
     <?= $form->field($model, 'author_id')->textInput() ?>

@@ -35,6 +35,14 @@ var_dump($model->getUsers()->createCommand()->getRawSql());
             'title',
             'started_at',
             'finished_at',
+            [
+                'label' => 'Started at',
+                'value' => \Yii::$app->formatter->asDate($model->started_at),
+            ],
+            [
+                'label' => 'Finished at',
+                'value' => \Yii::$app->formatter->asDate($model->finished_at),
+            ],
             'main',
             'cycle',
             'created_at',

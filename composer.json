@@ -61,6 +61,8 @@
         }
     },
     "repositories": [
+    "kartik-v/yii2-widget-datetimepicker": "*",
+    "yii2mod/yii2-rbac": "*"
         {
             "type": "composer",
             "url": "https://asset-packagist.org"
