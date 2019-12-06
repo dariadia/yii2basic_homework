@@ -27,6 +27,32 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
         ],
     ];
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => time()
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['email', 'email'],
+            [['username'], 'string', 'max' => 255],
+            [['auth_key'], 'default', 'value' => $this->generateAuthKey()],
+            [['password_hash'], 'default', 'value' => $this->setPassword($this->generatePassword())],
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -100,5 +126,12 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public function validatePassword($password)
     {
         return $this->password === $password;
+    public function generatePassword()
+    {
+        $this->password = Yii::$app->security->generateRandomString();
+    }
+    public function getActivities()
+    {
+        return $this->hasMany(Activity::class, ['author_id' => 'id']);
     }
 }

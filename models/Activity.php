@@ -11,6 +11,17 @@ class Activity extends \yii\base\Model
     public $body;
     public $cyclic;
     public $main;
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => time()
+            ],
+        ];
+    }
 
     public function rules()
     {
