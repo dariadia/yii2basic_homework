@@ -1,25 +1,45 @@
 <?php
 
-use app\controllers\SiteController;
+use yii\helpers\Html;
+use yii\grid\GridView;
+
+/* @var $this yii\web\View */
+/* @var $searchModel app\models\search\ActivitySearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Activities';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="activity-index">
 
-<?= SiteController::setVisitedPageTracking(); ?>
+    <h1><?= Html::encode($this->title) ?></h1>
 
-<h1>Активность: <?= $model->title; ?></h1>
-<h2>Свойства
-    <?php if ($model->main) : ?>
-        <p>Событие блокирует остальные ></p>
-    <?php endif; ?>
-    <?php if ($model->cyclic) : ?>
-        <p>Событие повторяется ></p>
-    <?php endif; ?>
+    <p>
+        <?= Html::a('Create Activity', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?php // echo $this->render('_search', ['model' => $searchModel]); 
+    ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'title',
+            'started_at',
+            'finished_at',
+            'author_id',
+            //'main',
+            //'cycle',
+            //'created_at',
+            //'updated_at',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 
 
-    <?php if ($model->startDay == $model->endDay) : ?>
-        <p>Событие на <?= date("d.m.Y", $model->startDay) ?></p>
-    <?php else : ?>
-        <p>Событие c <?= date("d.m.Y", $model->startDay) ?> по <?= date("d.m.Y", $model->endDay) ?></p>
-    <?php endif; ?>
-
-    <h3><?= $model->getAttributeLabel('body') ?></h3>
-    <div><?= $model->body ?></div>
+</div>

@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\SignupForm;
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -19,13 +21,18 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'class' => AccessControl::class,
+                'only' => ['logout', 'admin'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['admin'],
+                        'allow' => true,
+                        'roles' => ['admin']
                     ],
                 ],
             ],
@@ -61,10 +68,6 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $session = Yii::$app->session;
-        $session->open();
-        $this->setVisitedPageTracking();
-
         return $this->render('index');
     }
 
@@ -109,7 +112,6 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
-        $this->setVisitedPageTracking();
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
@@ -128,13 +130,40 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
-        $this->setVisitedPageTracking();
         return $this->render('about');
     }
 
-    public function setVisitedPageTracking()
+
+    public function actionSignup()
     {
-        $session = Yii::$app->session;
-        $session['lastVisitedPage'] = Yii::$app->request->url;
+        $model = new SignupForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                if (Yii::$app->getUser()->login($user)) {
+                    return $this->goHome();
+                }
+            }
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
     }
+
+    public function actionAdmin()
+    {
+        echo "hello admin";
+    }
+
+    /* public function actionSetRoleToUser($role, $username)
+    {
+        $user = User::findByUsername($username);
+        $adminRole = \Yii::$app->authManager->getRole($role);
+
+        if (!Yii::$app->user->can($adminRole->name)) {
+            \Yii::$app->authManager->assign($adminRole, $user->id);
+        }
+    }
+    */
 }
