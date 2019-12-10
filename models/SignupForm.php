@@ -1,3 +1,17 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+use yii\base\Model;
+use app\components\behaviors\SendEmailAfterSignUp;
+
+/**
+ * Signup form
+ */
+class SignupForm extends Model
+{
+
     public $username;
     public $email;
     public $password;
@@ -6,7 +20,7 @@
         return [
 
             'afterValidate' => [
-                'class' => BehaviorAfterValidate::class,
+                'class' => SendEmailAfterSignUp::class,
                 'email' => $this->email,
                 'password' => $this->password,
             ]
@@ -38,6 +52,8 @@
         $user->username = $this->username;
         $user->email = $this->email;
         $user->password =  $this->password;
+        $user->password_hash = Yii::$app->security->generatePasswordHash($this->password);
         //$user->generateAuthKey();
         return $user->save() ? $user : null;
     }
+}

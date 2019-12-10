@@ -1,12 +1,12 @@
 <?php
 
-namespace app\components;
+namespace app\components\behaviors;
 
 use Yii;
 use yii\db\ActiveRecord;
 use yii\base\Behavior;
 
-class BehaviorAfterValidate extends Behavior
+class SendEmailAfterSignUp extends Behavior
 {
     public $email;
     public $password;

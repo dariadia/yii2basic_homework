@@ -15,7 +15,15 @@ $config = [
     ],
     'components' => [
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => \yii\caching\MemCache::class,
+            'useMemcached' => true,
+            'servers' => [
+                [
+                    'host' => 'memcached',
+                    'port' => 11211,
+                    'persistent' => false,
+                ],
+            ],
         ],
         'log' => [
             'targets' => [
@@ -25,7 +33,22 @@ $config = [
                 ],
             ],
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.gmail.com',
+                'username' => 'dariadia@gmail.com',
+                'password' => 'myPassword',
+                'port' => '587',
+                'encryption' => 'tls',
+            ],
+        ],
         'db' => $db,
+        'authManager' => [
+            'class' => \yii\rbac\DbManager::class
+        ]
     ],
     'params' => $params,
     /*
