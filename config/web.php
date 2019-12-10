@@ -20,10 +20,18 @@ $config = [
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'leMlvfmQgiio-PNnCLJodZmWO5ZEy1_b',
+            'cookieValidationKey' => 'NDhozVwhwePiaa-Cs1rb12MWzdxHrISi',
         ],
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => \yii\caching\MemCache::class,
+            'useMemcached' => true,
+            'servers' => [
+                [
+                    'host' => 'memcached',
+                    'port' => 11211,
+                    'persistent' => false,
+                ],
+            ],
         ],
         'user' => [
             'identityClass' => 'app\models\User',

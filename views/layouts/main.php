@@ -37,6 +37,8 @@ AppAsset::register($this);
                 'class' => 'navbar-inverse navbar-fixed-top',
             ],
         ]);
+            ['label' => 'Profile', 'url' => ['/user-profile']],
+            ['label' => 'My Activities', 'url' => ['/activity']],
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav navbar-right'],
             'items' => [
