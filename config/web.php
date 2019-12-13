@@ -42,9 +42,6 @@ $config = [
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
         'log' => [
@@ -60,10 +57,26 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [],
+            'rules' => [
+                '/' => 'calendar/index',
+                'activity/<id_activity:\d+>' => 'activity/index',
+                '<controller:(activity)>/<id:\d+>/<action:(create|update|delete|view)>' => '<controller>/<action>',
+                '<module:(admin)>/<controller:(user)>/<action:(create|update|delete|view)>/<id:\d+>' => '<module>/<controller>/<action>',
+                'calendar/<id:\d+>' => 'calendar/view'
+            ],
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
+        'comp' => [
+            'class' => \app\components\Comp::class,
+        ],
+        'authManager' => [
+            'class' => \yii\rbac\DbManager::class
+        ],
+        'formatter' => [
+            'dateFormat' => 'dd.MM.yyyy',
+            'datetimeFormat' => 'dd.MM.yyyy H:m:s',
+            'decimalSeparator' => ',',
+            'thousandSeparator' => ' ',
+            'currencyCode' => 'EUR',
         ],
     ],
 
