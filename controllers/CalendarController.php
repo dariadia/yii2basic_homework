@@ -4,37 +4,65 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Activity;
-use app\models\search\ActivitySearch;
+use app\models\search\CalendarSearch;
+use app\models\Calendar;
+use edofre\fullcalendar\models\Event;
+use yii2mod\rbac\filters\AccessControl;
+use yii\helpers\Url;
+use yii\filters\VerbFilter;
 
 
 class CalendarController extends \yii\web\Controller
 {
-    // public function actionIndex()
-    // {
-    //     $activities = Activity::find()->all();
-    //     foreach ($activities as $activity) {
-    //         $activity = new Activity();
-    //         $activity->id = $activity->id;
-    //         $activity->title =  $activity->title;
-    //         $activity->started_at = $activity->started_at;
-    //         $activity->finished_at = $activity->finished_at;
-    //         $activity->author_id = $activity->author_id;
-    //         $activity->main =  $activity->main;
-    //         $activity->cycle =  $activity->cycle;
-    //         $activities[] = $activity;
-    //     }
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
 
-    //     return $this->render('index', [
-    //         'events' => $activities,
-    //     ]);
-    // }
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create', 'view', 'update', 'events'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
-        $searchModel = new ActivitySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return $this->render('index');
+    }
+    public function actionEvents($id, $start, $end)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+        $calendars = (new CalendarSearch())->search(['start' => $start, 'end' => $end]);
+
+        $result = [];
+
+        foreach ($calendars->models as $calendar) {
+            $activity = $calendar->activity;
+            $result[] = new Event([
+                'id' => $activity->id,
+                'title' => $activity->title,
+                'start' => Yii::$app->formatter->asDateTime($activity->started_at, 'php:c'),
+                'end' => Yii::$app->formatter->asDateTime($activity->finished_at, 'php:c'),
+                'editable' => false,
+                'startEditable' => false,
+                'durationEditable' => false,
+                'color' => 'blue',
+                'url' => Url::to(['view', 'id' => $activity->id])
+            ]);
+        }
+        return $result;
     }
 }
