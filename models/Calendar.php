@@ -56,7 +56,7 @@ class Calendar extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getActivity()
+    public function getActivities()
     {
         return $this->hasOne(Activity::class, ['id' => 'activity_id']);
     }
